@@ -6,7 +6,7 @@ void read_command(char *command, size_t size) {
             joelprint("\n");
             exit(EXIT_SUCCESS);
         } else {
-            joelprint("Error while reading input.\n");
+            joelprint("Error valhalla will have to wait for now\n");
             exit(EXIT_FAILURE);
         }
     }
