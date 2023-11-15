@@ -1,6 +1,4 @@
 #include "custom_shell.h"
 
-void display_prompt(void) {
-    joelprint("joelshell$$$$$ ");
-}
-
+void dislay_prompt(void)
+{joelprint("joelshell$$$$$"); }
