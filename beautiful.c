@@ -6,11 +6,22 @@
 
 #define BUFSIZE 1024
 
+/**
+ *prompt - display the string "($)" followed by a space on the standard output.
+ *
+ *write: system call to output
+ */
 void prompt(void)
 {
 	 write(STDOUT_FILENO, "($) ", 4);
 }
 
+/**
+ *executeCommand - designed to execute a command specified by the input string
+ *
+ *@line: The function takes a character array (char *) as input
+ *_exit: This line is executed only if execve fails.
+ */
 void executeCommand(char *line)
 {
 	char *token;
@@ -29,6 +40,17 @@ void executeCommand(char *line)
 	perror("execve");
 	_exit(EXIT_FAILURE);
 }
+
+/**
+ * main - Entry point
+ *
+ * Description: 'the program's description'
+ * @argc: parameter number 1
+ * @argv: parameter number 2
+ *
+ * Return: Always 0 (Success)
+ */
+
 int main(int argc, char *argv[])
 {
 	char *line = NULL;
