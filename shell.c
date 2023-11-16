@@ -5,44 +5,44 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+#define MAX_INPUT_LENGTH 1024
+
 void handle_ctrl_d(char *command)
 {
 	printf("\n");
 	free(command);
 	exit(EXIT_SUCCESS);
 }
+
 void handle_child_process(char *command)
 {
 	execlp(command, command, (char *)NULL);
 	fprintf(stderr, "./shell: %s: No such file or directory\n", command);
 	_exit(EXIT_FAILURE);
 }
-void handle_parent_process(char *command)
-{
-	int status;
 
-	wait(&status);
-	if (WIFSIGNALED(status))
-	{
-		printf("\n");
-	}
-}
 int main(void)
 {
 	char *command = NULL;
-	size_t len = 0;
 
 	while (1)
 	{
 		printf("#cisfun$ ");
-		ssize_t read_len = getline(&command, &len, stdin);
 
-		if (read_len == -1)
+		command = (char *)malloc(MAX_INPUT_LENGTH);
+		if (command == NULL)
+		{
+			perror("malloc");
+			exit(EXIT_FAILURE);
+		}
+
+		if (fgets(command, MAX_INPUT_LENGTH, stdin) == NULL)
 		{
 			handle_ctrl_d(command);
 		}
+		size_t read_len = strlen(command);
 
-		if (read_len > 1)
+		if (read_len > 0 && command[read_len - 1] == '\n')
 		{
 			command[read_len - 1] = '\0';
 		}
@@ -52,13 +52,12 @@ int main(void)
 		if (child_pid == -1)
 		{
 			perror("fork");
-		}
-		else if (child_pid == 0)
+		} else if (child_pid == 0)
 		{
 			handle_child_process(command);
-		} else
-			handle_parent_process(command);
+		}
+		free(command);
 	}
-	free(command);
+
 	return (0);
 }
